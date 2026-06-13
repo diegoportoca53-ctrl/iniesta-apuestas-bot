@@ -1,17 +1,12 @@
 import logging
-import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from datetime import datetime
-import pytz
 
 TOKEN = "8936540064:AAGCR1xRM6vREHX2kY5Z9JPWS6Gvo8F2ijc"
 CANAL_ID = "@iniesta_apuestas"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-ZONA_HORARIA = pytz.timezone("America/Bogota")
 
 PRONOSTICOS = [
     {
@@ -141,20 +136,16 @@ async def botones(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(texto)
 
 
-async def main():
+def main():
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("pronostico", cmd_pronostico))
     app.add_handler(CommandHandler("vivo", cmd_vivo))
     app.add_handler(CommandHandler("estadisticas", cmd_estadisticas))
     app.add_handler(CallbackQueryHandler(botones))
-
-    scheduler = AsyncIOScheduler(timezone=ZONA_HORARIA)
-    scheduler.start()
-
     logger.info("Bot iniciado correctamente")
-    await app.run_polling()
+    app.run_polling(drop_pending_updates=True)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
