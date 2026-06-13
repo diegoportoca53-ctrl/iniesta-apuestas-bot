@@ -10,7 +10,7 @@ import pytz
 
 # ─── CONFIGURACIÓN ────────────────────────────────────────────────────────────
 TOKEN = "8936540064:AAHx_mRYoXIQgIdsNltIKgUUs2wgFvVx-ME"          # 👈 Reemplaza con tu token
-CANAL_ID = "iniestapuestas_bot"       # 👈 Reemplaza con el @usuario de tu canal
+CANAL_ID = "iniesta_apuestas"       # 👈 Reemplaza con el @usuario de tu canal
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
