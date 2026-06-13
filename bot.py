@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -140,30 +141,7 @@ async def botones(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(texto)
 
 
-async def publicar_pronosticos(app):
-    texto = "PRONOSTICOS DEL DIA\n"
-    texto += f"{datetime.now(ZONA_HORARIA).strftime('%d/%m/%Y')}\n"
-    texto += "━━━━━━━━━━━━━━━━━━━━━━\n\n"
-    for i, p in enumerate(PRONOSTICOS, 1):
-        texto += formato_pronostico(p, i) + "\n\n"
-    texto += "Juega con responsabilidad."
-    await app.bot.send_message(chat_id=CANAL_ID, text=texto)
-
-
-async def publicar_recordatorio(app):
-    await app.bot.send_message(
-        chat_id=CANAL_ID,
-        text=(
-            "RECORDATORIO DE PARTIDOS\n"
-            "━━━━━━━━━━━━━━━━━━━━━━\n"
-            "Los partidos de hoy estan por comenzar.\n"
-            "Revisa nuestros pronosticos del dia.\n\n"
-            "Usa /pronostico para verlos."
-        )
-    )
-
-
-def main():
+async def main():
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("pronostico", cmd_pronostico))
@@ -172,13 +150,11 @@ def main():
     app.add_handler(CallbackQueryHandler(botones))
 
     scheduler = AsyncIOScheduler(timezone=ZONA_HORARIA)
-    scheduler.add_job(publicar_pronosticos, "cron", hour=9, minute=0, args=[app])
-    scheduler.add_job(publicar_recordatorio, "cron", hour=18, minute=0, args=[app])
     scheduler.start()
 
     logger.info("Bot iniciado correctamente")
-    app.run_polling()
+    await app.run_polling()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
