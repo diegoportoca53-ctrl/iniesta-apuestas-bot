@@ -5,7 +5,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 import pytz
 
-TOKEN = "8936540064:AAHx_mRYoXIQgIdsNltIKgUUs2wgFvVx-ME"
+TOKEN = "8936540064:AAGCR1xRM6vREHX2kY5Z9JPWS6Gvo8F2ijc"
 CANAL_ID = "@iniesta_apuestas"
 
 logging.basicConfig(level=logging.INFO)
